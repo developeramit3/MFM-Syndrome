@@ -96,7 +96,6 @@ dependencies:
   flutter_blue: ^0.8.0
   flutter_tawk: ^0.0.5
   flutter_udid: ^2.0.0
-  flutter_windowmanager: ^0.2.0
 
   flutter_localizations:
     sdk: flutter
