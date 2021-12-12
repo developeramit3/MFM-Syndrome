@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: :commonlib:@aar" type="AndroidModuleLibraryType">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b1f372232ee3eeb10c625035dc0a1a09/jetified-commonlib/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b1f372232ee3eeb10c625035dc0a1a09/jetified-commonlib/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
