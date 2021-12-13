@@ -62,5 +62,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSContactsUsageDescription</key>
+    <string>$(PRODUCT_NAME) MyApp needs access to your Contacts</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>$(PRODUCT_NAME) MyApp needs access to your Calendars</string>
+<key>NSPhotoLibraryUsageDescription</key>
+    <string>$(PRODUCT_NAME) MyApp needs access to your Photo</string>
+<key>NSAppleMusicUsageDescription</key>
+    <string>$(PRODUCT_NAME) MyApp needs access to your Apple Music</string>
+<key>NSMotionUsageDescription</key>
+    <string>$(PRODUCT_NAME) MyApp needs access to your Motion Usage</string>
+<key>NSSpeechRecognitionUsageDescription</key>
+    <string>$(PRODUCT_NAME) MyApp needs access to your Speech Recognition Usage</string>
 </dict>
 </plist>

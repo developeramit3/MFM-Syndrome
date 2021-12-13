@@ -20,4 +20,12 @@ import Flutter
   ) {
     self.window.isHidden = false;
   }
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // Configure the user interactions first.
+        self.configureUserInteractions()
+        
+        // Register with APNs
+        UIApplication.shared.registerForRemoteNotifications()
+    }
 }
