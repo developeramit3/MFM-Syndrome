@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uuid/uuid.dart';
 import '../common/apidata.dart';
 import '../common/global.dart';
 import '../model/faq_model.dart';
@@ -13,7 +14,6 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:convert' as convert;
-import 'package:flutter_udid/flutter_udid.dart';
 
 
 class Access with ChangeNotifier {
@@ -81,10 +81,11 @@ class HttpService {
   }
 
   Future<bool> login(String email, String pass, BuildContext context, _scaffoldKey) async {
-    String udid = await FlutterUdid.udid;
+    var uuid = Uuid();
+    String udid=uuid.v5(Uuid.NAMESPACE_URL, APIData.domainLink);
     http.Response res = await http.post(Uri.parse(APIData.login),
         body: {"email": email, "password": pass,"udid": udid});
-    print("===========>${res.body}");
+    print("===========>${res.request.toString()}");
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       authToken = body["access_token"];
@@ -136,10 +137,15 @@ class HttpService {
     print(name);
     print(email);
     print(password);
-    String udid = await FlutterUdid.udid;
+    var uuid = Uuid();
+    String udid=uuid.v5(Uuid.NAMESPACE_URL, APIData.domainLink);
+    print("=====> udid $udid");
     http.Response res = await http.post(Uri.parse(APIData.register),
         body: {"name": name, "email": email, "password": password,"udid": udid},
         headers: {"Accept": "application/json"});
+    print("=====> ${res.request.toString()}");
+    print("=====> ${res.statusCode}");
+    print("=====> ${res.body}");
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       authToken = body["access_token"];
