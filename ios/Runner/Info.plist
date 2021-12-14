@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>https</string>
@@ -29,12 +29,18 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>$(PRODUCT_NAME) MyApp needs access to your Apple Music</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Need BLE permission</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Need BLE permission</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>$(PRODUCT_NAME) MyApp needs access to your Calendars</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) MyApp needs access to your camera for meetings.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>$(PRODUCT_NAME) MyApp needs access to your Contacts</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Need Location permission</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -43,6 +49,12 @@
 	<string>Need Location permission</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) MyApp needs access to your microphone for meetings.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>$(PRODUCT_NAME) MyApp needs access to your Motion Usage</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) MyApp needs access to your Photo</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>$(PRODUCT_NAME) MyApp needs access to your Speech Recognition Usage</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -62,17 +74,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSContactsUsageDescription</key>
-    <string>$(PRODUCT_NAME) MyApp needs access to your Contacts</string>
-    <key>NSCalendarsUsageDescription</key>
-    <string>$(PRODUCT_NAME) MyApp needs access to your Calendars</string>
-<key>NSPhotoLibraryUsageDescription</key>
-    <string>$(PRODUCT_NAME) MyApp needs access to your Photo</string>
-<key>NSAppleMusicUsageDescription</key>
-    <string>$(PRODUCT_NAME) MyApp needs access to your Apple Music</string>
-<key>NSMotionUsageDescription</key>
-    <string>$(PRODUCT_NAME) MyApp needs access to your Motion Usage</string>
-<key>NSSpeechRecognitionUsageDescription</key>
-    <string>$(PRODUCT_NAME) MyApp needs access to your Speech Recognition Usage</string>
 </dict>
 </plist>
