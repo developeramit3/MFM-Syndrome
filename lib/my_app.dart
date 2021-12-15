@@ -1,3 +1,4 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:eclass/Screens/blog_list_screen.dart';
 import 'package:eclass/Screens/terms_policy.dart';
 import 'package:eclass/localization/language_screen.dart';
@@ -75,7 +76,9 @@ class MyApp extends StatelessWidget {
   bool isHotSpotEnabled = false;
   static const platform = const MethodChannel('flutter.native/helper');
   final HttpService httpService = HttpService();
-  MyApp(this.token);
+  MyApp(this.token){
+    configBackgroundTask();
+  }
   // This widget is the root of your application.
 
   static FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -205,5 +208,42 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+  Future<void> configBackgroundTask() async {
+    // Configure BackgroundFetch.
+    try {
+      var status = await BackgroundFetch.configure(BackgroundFetchConfig(
+        minimumFetchInterval: 15,
+        /*
+        forceAlarmManager: false,
+        stopOnTerminate: false,
+        startOnBoot: true,
+        enableHeadless: true,
+        requiresBatteryNotLow: false,
+        requiresCharging: false,
+        requiresStorageNotLow: false,
+        requiresDeviceIdle: false,
+        requiredNetworkType: NetworkType.NONE,
 
+         */
+      ), _onBackgroundFetch);
+      print('[BackgroundFetch] configure success: $status');
+      // Schedule a "one-shot" custom-task in 10000ms.
+      // These are fairly reliable on Android (particularly with forceAlarmManager) but not iOS,
+      // where device must be powered (and delay will be throttled by the OS).
+      BackgroundFetch.scheduleTask(TaskConfig(
+          taskId: "com.transistorsoft.customtask",
+          delay: 1000,
+          periodic: false,
+          forceAlarmManager: true,
+          stopOnTerminate: false,
+          enableHeadless: true
+      ));
+    } on Exception catch(e) {
+      print("[BackgroundFetch] configure ERROR: $e");
+    }
+  }
+  void _onBackgroundFetch(String taskId) async {
+    print("[BackgroundFetch]======>: $taskId");
+
+  }
 }

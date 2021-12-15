@@ -1,3 +1,4 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -66,4 +67,21 @@ Future<String> checkViolence() async {
   }
   bool isAllFine= !isJailBroken&&isRealDevice&&!canMockLocation&&!isOnExternalStorage&&!isBla&&!isHotSpotEnabled&&!isDevMode&&!isUSBConnected;
   return messagess.toString();
+}
+void backgroundFetchHeadlessTask(task) async {
+  String taskId = task.taskId;
+  bool isTimeout = task.timeout;
+  if (isTimeout) {
+    checkViolence().then((value) =>{
+      print("Running ==== $value")
+    });
+    // This task has exceeded its allowed running-time.
+    // You must stop what you're doing and immediately .finish(taskId)
+    print("[BackgroundFetch] Headless task timed-out: $taskId");
+    BackgroundFetch.finish(taskId);
+    return;
+  }
+  print('[BackgroundFetch] Headless event received.');
+  // Do your work here...
+  BackgroundFetch.finish(taskId);
 }

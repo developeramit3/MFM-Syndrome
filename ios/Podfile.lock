@@ -8,6 +8,8 @@ PODS:
     - Flutter
   - audioplayers (0.0.1):
     - Flutter
+  - background_fetch (1.0.3):
+    - Flutter
   - better_player (0.0.1):
     - Flutter
     - KTVHTTPCache (~> 2.0.0)
@@ -258,6 +260,7 @@ PODS:
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
+  - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
   - better_player (from `.symlinks/plugins/better_player/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -326,6 +329,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audio_session/ios"
   audioplayers:
     :path: ".symlinks/plugins/audioplayers/ios"
+  background_fetch:
+    :path: ".symlinks/plugins/background_fetch/ios"
   better_player:
     :path: ".symlinks/plugins/better_player/ios"
   file_picker:
@@ -389,6 +394,7 @@ SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   audioplayers: 455322b54050b30ea4b1af7cd9e9d105f74efa8c
+  background_fetch: 8fa13640fc6e658a7c2e9a2dbc07af8650af215c
   better_player: a4383402f457e53720525888c0fc5d337ef6ba11
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DKImagePickerController: b5eb7f7a388e4643264105d648d01f727110fc3d

@@ -10,7 +10,9 @@ class TermsPolicyProvider extends ChangeNotifier {
 
   Future<void> getData() async {
     String url = APIData.termsPolicy + APIData.secretKey;
-    Response res = await get(Uri.parse(url));
+    Response res = await get(Uri.parse(url),headers: {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0 PEB/1.0.0.0',
+    });
     if (res.statusCode == 200) {
       print("Terms Policy Response : ${res.body}");
       termsPolicyModel = TermsPolicyModel.fromJson(json.decode(res.body));

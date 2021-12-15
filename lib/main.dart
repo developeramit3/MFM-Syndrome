@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:background_fetch/background_fetch.dart';
+import 'package:eclass/utils/AppValidation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -21,6 +23,7 @@ void main() async {
 
 
   runApp(LocalizedApp(delegate, MyApp(authToken)));
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 }
 
 
