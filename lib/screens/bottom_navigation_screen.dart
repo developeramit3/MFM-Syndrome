@@ -4,10 +4,7 @@ import 'package:eclass/localization/language_provider.dart';
 import 'package:eclass/provider/recent_course_provider.dart';
 import 'package:eclass/provider/watchlist_provider.dart';
 import 'package:eclass/utils/AppValidation.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:safe_device/safe_device.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'cart_screen.dart';
 import 'courses_screen.dart';
@@ -92,23 +89,12 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   void initState() {
     super.initState();
     _selectedIndex = widget.pageInd != null ? widget.pageInd : 0;
-
     languageProvider = Provider.of<LanguageProvider>(context, listen: false);
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       getHomePageData();
     });
-    WidgetsFlutterBinding.ensureInitialized().addPersistentFrameCallback((timeStamp) async {
-      if(isShowingDialog==0){
-        checkViolence().then((value) => {
-          if(value.isNotEmpty){
-            isShowingDialog++,
-            if(isShowingDialog==1){
-              showErrorDialog(context, value),
-            },
-          }
-        });
-      }
+    WidgetsFlutterBinding.ensureInitialized().addTimingsCallback((timings) {
+     callbackDispatcher();
     });
   }
   showErrorDialog(BuildContext context,String message) {

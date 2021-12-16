@@ -1,12 +1,17 @@
-import 'package:background_fetch/background_fetch.dart';
+import 'dart:async';
+
+import 'package:eclass/utils/NavigationService.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safe_device/safe_device.dart';
-import 'dart:io' show Platform;
+import 'dart:io' show Platform, exit;
+
+const platform = const MethodChannel('flutter.native/helper');
+
 Future<String> checkViolence() async {
   StringBuffer messagess=StringBuffer();
-   const platform = const MethodChannel('flutter.native/helper');
   bool canMockLocation=false;
   bool isOnExternalStorage=false;
   bool isBla=false;
@@ -65,23 +70,70 @@ Future<String> checkViolence() async {
   messagess.writeln(
   "* USB Connected, Disconnect USD for running safe & open app again.");
   }
-  bool isAllFine= !isJailBroken&&isRealDevice&&!canMockLocation&&!isOnExternalStorage&&!isBla&&!isHotSpotEnabled&&!isDevMode&&!isUSBConnected;
   return messagess.toString();
 }
-void backgroundFetchHeadlessTask(task) async {
-  String taskId = task.taskId;
-  bool isTimeout = task.timeout;
-  if (isTimeout) {
-    checkViolence().then((value) =>{
-      print("Running ==== $value")
+bool isShowingDialog=false;
+void callbackDispatcher() {
+  if(!isShowingDialog){
+    checkViolence().then((value) => {
+      if(value.isNotEmpty){
+        isShowingDialog=true,
+        showErrorDialog(value),
+      }else{
+        isShowingDialog=true,
+        Timer(Duration(milliseconds: 10000), () {
+          isShowingDialog=false;
+  }),
+      }
     });
-    // This task has exceeded its allowed running-time.
-    // You must stop what you're doing and immediately .finish(taskId)
-    print("[BackgroundFetch] Headless task timed-out: $taskId");
-    BackgroundFetch.finish(taskId);
-    return;
   }
-  print('[BackgroundFetch] Headless event received.');
-  // Do your work here...
-  BackgroundFetch.finish(taskId);
+}
+showErrorDialog(String message) {
+  showDialog(
+    context: NavigationService.navigatorKey.currentContext,
+    useSafeArea: true,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      shape:
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      contentPadding: EdgeInsets.only(top: 5.0, left: 20.0, bottom: 0.0),
+      title: Text(
+        'Warning',
+        textAlign: TextAlign.start,
+        style: TextStyle(
+            fontFamily: 'Mada',
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF0284A2)),
+      ),
+      content: Padding(
+        padding: EdgeInsets.only(right: 10),
+        child: Text(
+          message,
+          style: TextStyle(fontFamily: 'Mada', color: Color(0xFF3F4654)),
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+            onPressed: () {
+              isShowingDialog=false;
+              Navigator.pop(context);
+            },
+            child: Text(
+              "Done".toUpperCase(),
+              style: TextStyle(
+                  color: Color(0xFF153CFC), fontWeight: FontWeight.w600),
+            )),
+        FlatButton(
+            onPressed: () {
+              exit(0);
+            },
+            child: Text(
+              "Exit".toUpperCase(),
+              style: TextStyle(
+                  color: Color(0xFF0284A2), fontWeight: FontWeight.w600),
+            )),
+      ],
+    ),
+  );
+
 }

@@ -29,13 +29,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  background_fetch:
-    dependency: "direct main"
-    description:
-      name: background_fetch
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
   better_player:
     dependency: "direct main"
     description:
@@ -616,6 +609,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  onesignal_flutter:
+    dependency: "direct main"
+    description:
+      name: onesignal_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.7"
   page_transition:
     dependency: "direct main"
     description:

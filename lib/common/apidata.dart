@@ -1,5 +1,6 @@
 class APIData {
   static const String domainLink = "https://mfmsyndrome.org/";
+  static const String DIRECT_CHAT_LINK = "https://tawk.to/chat/610b025bd6e7610a49aea283/1fc9g2e9q";
 
   static const String domainApiLink = domainLink + "api/";
 

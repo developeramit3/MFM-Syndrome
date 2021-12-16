@@ -1,3 +1,4 @@
+import 'package:eclass/provider/user_profile.dart';
 import 'package:flutter_tawk/flutter_tawk.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -273,19 +274,19 @@ print("LatLon $lat $lon");
   Color txtColor;
   @override
   Widget build(BuildContext context) {
+    UserProfile user = Provider.of<UserProfile>(context);
     T.Theme mode = Provider.of<T.Theme>(context);
     txtColor = mode.txtcolor;
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: mode.bgcolor,
-      appBar: secondaryAppBar(mode.notificationIconColor, mode.bgcolor, context,
-          translate("Contact_Us")),
+      // appBar: secondaryAppBar(mode.notificationIconColor, mode.bgcolor, context, translate("Contact_Us")),
       // body: scaffoldBody(mode.notificationIconColor),
       body: Tawk(
-        directChatLink: 'YOUR_DIRECT_CHAT_LINK',
+        directChatLink: APIData.DIRECT_CHAT_LINK,
         visitor: TawkVisitor(
-          name: 'Ayoub AMINE',
-          email: 'ayoubamine2a@gmail.com',
+          name: user.profileInstance.fname,
+          email: user.profileInstance.email,
         ),
       ),
     );

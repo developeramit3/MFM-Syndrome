@@ -86,8 +86,8 @@ class HttpService {
     http.Response res = await http.post(Uri.parse(APIData.login),
         body: {"email": email, "password": pass,"udid": udid});
     print("===========>${res.request.toString()}");
+    var body = jsonDecode(res.body);
     if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
       authToken = body["access_token"];
       var refreshToken = body["access_token"];
       await storage.write(key: "token", value: "$authToken");
@@ -108,7 +108,7 @@ class HttpService {
         return false;
       } else {
         _scaffoldKey.currentState.showSnackBar(SnackBar(
-          content: Text("Login Failed!"),
+          content: Text(body['errors']),
           action: SnackBarAction(label: "ok", onPressed: () {}),
         ));
         return false;

@@ -40,7 +40,6 @@ class _SignInScreenState extends State<SignInScreen>
   var profileData;
   var facebookLogin = FacebookLogin();
   bool isShowing = false;
-  int isShowingDialog=0;
   @override
   void dispose() {
     super.dispose();
@@ -92,69 +91,12 @@ class _SignInScreenState extends State<SignInScreen>
       animationController.forward();
       _controllerB.forward(from: 0.0);
     });
-    WidgetsFlutterBinding.ensureInitialized().addPersistentFrameCallback((timeStamp) async {
-      if(isShowingDialog==0){
-        checkViolence().then((value) => {
-          if(value.isNotEmpty){
-            isShowingDialog++,
-            if(isShowingDialog==1){
-              showErrorDialog(context, value),
-            },
-          }
-        });
-      }
+    WidgetsFlutterBinding.ensureInitialized().addTimingsCallback((timings) {
+      callbackDispatcher();
     });
     super.initState();
   }
-  showErrorDialog(BuildContext context,String message) {
-    showDialog(
-      context: context,
-      useSafeArea: true,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        contentPadding: EdgeInsets.only(top: 5.0, left: 20.0, bottom: 0.0),
-        title: Text(
-          'Warning',
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              fontFamily: 'Mada',
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF0284A2)),
-        ),
-        content: Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: Text(
-            message,
-            style: TextStyle(fontFamily: 'Mada', color: Color(0xFF3F4654)),
-          ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-              onPressed: () {
-                isShowingDialog=0;
-                Navigator.pop(context);
-              },
-              child: Text(
-                "Done".toUpperCase(),
-                style: TextStyle(
-                    color: Color(0xFF153CFC), fontWeight: FontWeight.w600),
-              )),
-          FlatButton(
-              onPressed: () {
-                exit(0);
-              },
-              child: Text(
-                "Exit".toUpperCase(),
-                style: TextStyle(
-                    color: Color(0xFF0284A2), fontWeight: FontWeight.w600),
-              )),
-        ],
-      ),
-    );
 
-  }
 // Alert dialog after clicking on login button
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(

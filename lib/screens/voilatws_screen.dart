@@ -59,6 +59,7 @@ class _SignInScreenState extends State<voilatwsScreen>
   showErrorDialog(BuildContext context,String message) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         shape:
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
