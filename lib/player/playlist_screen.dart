@@ -8,11 +8,13 @@ import 'package:eclass/player/custom_player.dart';
 import 'package:eclass/player/iframe_player.dart';
 import 'package:eclass/player/offline/offline_data.dart';
 import 'package:eclass/player/youtube_player_screen.dart';
+import 'package:eclass/provider/user_profile.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:video_player/video_player.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:eclass/Widgets/appbar.dart';
@@ -28,7 +30,7 @@ import 'package:eclass/zoom/join_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../common/theme.dart' as T;
 import 'audio_player.dart';
 import 'downloader.dart';
@@ -56,10 +58,9 @@ class PlayListScreen extends StatefulWidget {
 }
 
 class _PlayListScreenState extends State<PlayListScreen>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   bool showBottomNavigation = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  AnimationController animationController;
   TabController tabController;
   var newIndex = 1;
   var _playingIndex = -1;
@@ -77,8 +78,6 @@ class _PlayListScreenState extends State<PlayListScreen>
   bool iconType = false;
   bool _isDisposed = false;
   var vimeo = '';
-  WebViewController _webViewController;
-
   // Downloader
   Downloader downloader = Downloader();
   List<Map<String, String>> videos = [];
@@ -693,15 +692,13 @@ class _PlayListScreenState extends State<PlayListScreen>
       if (_controller == null) {
         _controller = YoutubePlayerController(
           initialVideoId: '$youId',
-          params: const YoutubePlayerParams(
-            showControls: true,
-            showFullscreenButton: true,
-            desktopMode: true,
+          flags: YoutubePlayerFlags(
             autoPlay: true,
-            privacyEnhanced: true,
+            mute: false,
           ),
+
         );
-        _controller.onEnterFullscreen = () {
+        /*_controller.onEnterFullscreen = () {
           SystemChrome.setPreferredOrientations([
             DeviceOrientation.landscapeLeft,
             DeviceOrientation.landscapeRight,
@@ -715,7 +712,7 @@ class _PlayListScreenState extends State<PlayListScreen>
           Future.delayed(const Duration(seconds: 5), () {
             SystemChrome.setPreferredOrientations(DeviceOrientation.values);
           });
-        };
+        };*/
         await Future.delayed(Duration(seconds: 2));
         _controller.play();
       } else {
@@ -1052,16 +1049,20 @@ class _PlayListScreenState extends State<PlayListScreen>
       // For playing youtube videos
       _controller = YoutubePlayerController(
         initialVideoId: '$youId',
-        params: const YoutubePlayerParams(
+        flags: YoutubePlayerFlags(
+          autoPlay: true,
+          mute: true,
+        ),
+        /*params: const YoutubePlayerParams(
           showControls: true,
           showFullscreenButton: true,
           desktopMode: true,
           autoPlay: false,
           privacyEnhanced: true,
-        ),
+        ),*/
       );
 
-      _controller.onEnterFullscreen = () {
+      /*_controller.onEnterFullscreen = () {
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.landscapeLeft,
           DeviceOrientation.landscapeRight,
@@ -1075,7 +1076,7 @@ class _PlayListScreenState extends State<PlayListScreen>
         Future.delayed(const Duration(seconds: 5), () {
           SystemChrome.setPreferredOrientations(DeviceOrientation.values);
         });
-      };
+      };*/
     } else if (url.substring(0, 24) == 'https://drive.google.com') {
       setState(() {
         urlType = "CUSTOM";
@@ -1116,7 +1117,8 @@ class _PlayListScreenState extends State<PlayListScreen>
         betterPlayerConfiguration,
         betterPlayerDataSource: dataSource,
       );
-    } else if (checkUrl == "mp4" ||
+    }
+    else if (checkUrl == "mp4" ||
         checkUrl == "mpd" ||
         checkUrl == "webm" ||
         checkUrl == "mkv" ||
@@ -1285,6 +1287,10 @@ class _PlayListScreenState extends State<PlayListScreen>
     }
   }
 
+  AnimationController _anicontroller;
+  Animation<Offset>_offsetAnimation;
+  UserProfile user;
+  OverlayEntry entry;
   @override
   void initState() {
     super.initState();
@@ -1297,6 +1303,18 @@ class _PlayListScreenState extends State<PlayListScreen>
     WatchlistProvider()
         .addToWatchList(courseId: widget.courseDetails.course.id);
     dbHandler.openDB();
+     _anicontroller = AnimationController(
+      duration: const Duration(seconds: 5),
+      vsync: this,
+    )..repeat(reverse: true);
+    _offsetAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(1.5, 0.0),
+    ).animate(CurvedAnimation(
+      parent: _anicontroller,
+      curve: Curves.linear,
+    ));
+
   }
 
   // Downloader
@@ -1306,11 +1324,9 @@ class _PlayListScreenState extends State<PlayListScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Downloade
+    user = Provider.of<UserProfile>(context);
     downloader.platform = Theme.of(context).platform;
-    // Changed
     selectedSecs = widget.markedSec;
-
     JavascriptChannel _toasterJavascriptChannel(BuildContext context) {
       return JavascriptChannel(
           name: 'Toaster',
@@ -1320,13 +1336,13 @@ class _PlayListScreenState extends State<PlayListScreen>
             );
           });
     }
-
     T.Theme mode = Provider.of<T.Theme>(context);
     bool firstTime = Provider.of<CoursesProvider>(context, listen: false)
         .checkPurchaedProgressStatus(
             widget.sections[0].sectionDetails.courseId);
     return Scaffold(
       key: _scaffoldKey,
+
       appBar: customAppBar(context, translate("Playlist_")),
       body: DefaultTabController(
         length: 2,
@@ -1344,26 +1360,80 @@ class _PlayListScreenState extends State<PlayListScreen>
                   child: Column(
                     children: [
                       if (urlType == "CUSTOM")
-                        Container(
-                          height: 220.0,
-                          child: _betterPlayerController != null
-                              ? CustomPlayer(_betterPlayerController)
-                              : null,
+                        Stack(
+                          children: [
+                            Container(
+                              height: 220.0,
+                              child:BetterPlayer(controller: _betterPlayerController),
+                            ),
+                            Positioned(
+                                width: MediaQuery.of(context).size.width,
+                                top: 170,
+                                child: SlideTransition(
+                                  position:_offsetAnimation,
+                                  child: Container(
+                                      child: Text(user==null?"":"${user.profileInstance.email}",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            backgroundColor: Colors.grey.shade200,
+                                            fontSize: 10
+                                        ),)
+                                  ),
+                                )),
+                          ],
                         ),
                       if (urlType == "VIMEO")
-                        Container(
-                          height: 300.0,
-                          child: VimeoPlayer(
-                            videoId: vimeo.split("/").last,
-                          ),
+                        Stack(
+                          children: [
+                            Container(
+                              height: 300.0,
+                              child: VimeoPlayer(
+                                videoId: vimeo.split("/").last,
+                              ),
+                            ),
+                            Positioned(
+                                width: MediaQuery.of(context).size.width,
+                                top: 200,
+                                child: SlideTransition(
+                                  position:_offsetAnimation,
+                                  child: Container(
+                                      child: Text(user==null?"":"${user.profileInstance.email}",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            backgroundColor: Colors.grey.shade200,
+                                            fontSize: 10
+                                        ),)
+                                  ),
+                                )),
+                          ],
                         ),
                       if (urlType == "YOUTUBE")
-                        Container(
-                          height: 300.0,
-                          alignment: Alignment.center,
-                          child: _controller != null
-                              ? YoutubePlayerScreen(_controller)
-                              : null,
+                        Stack(
+                          children: [
+                            Container(
+                              height: 300.0,
+                              alignment: Alignment.center,
+                              child: _controller != null
+                                  ? YoutubePlayer(
+                                controller: _controller,
+                                showVideoProgressIndicator: true,)
+                                  : null,
+                            ),
+                            Positioned(
+                                width: MediaQuery.of(context).size.width,
+                                top: 200,
+                                child: SlideTransition(
+                                  position:_offsetAnimation,
+                                  child: Container(
+                                      child: Text(user==null?"":"${user.profileInstance.email}",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            backgroundColor: Colors.grey.shade200,
+                                            fontSize: 10
+                                        ),)
+                                  ),
+                                )),
+                          ],
                         ),
                       TabBar(
                         unselectedLabelColor: Colors.grey,
@@ -1445,9 +1515,28 @@ class _PlayListScreenState extends State<PlayListScreen>
   }
 
   @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print("=====>deactivate");
+    _anicontroller.dispose();
+    if (_betterPlayerController != null) {
+      _betterPlayerController.dispose();
+    }
+
+    _isDisposed = true;
+    // Downloader
+    downloader.disposes();
+
+    WidgetsBinding.instance.removeObserver(this);
+    WatchlistProvider().removeFromWatchList();
+  }
+  @override
   void dispose() {
     // TODO: implement dispose
+    print("=====>dispose");
     super.dispose();
+    _anicontroller.dispose();
     if (_betterPlayerController != null) {
       _betterPlayerController.dispose();
     }
@@ -1464,6 +1553,7 @@ class _PlayListScreenState extends State<PlayListScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
+    print("=====> $state");
     switch (state) {
       case AppLifecycleState.inactive:
         log("Inactive App"); // Called when app minimized.

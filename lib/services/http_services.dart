@@ -82,7 +82,7 @@ class HttpService {
 
   Future<bool> login(String email, String pass, BuildContext context, _scaffoldKey) async {
     var uuid = Uuid();
-    String udid=uuid.v5(Uuid.NAMESPACE_URL, APIData.domainLink);
+    String udid=uuid.v4();
     http.Response res = await http.post(Uri.parse(APIData.login),
         body: {"email": email, "password": pass,"udid": udid});
     print("===========>${res.request.toString()}");
@@ -138,7 +138,7 @@ class HttpService {
     print(email);
     print(password);
     var uuid = Uuid();
-    String udid=uuid.v5(Uuid.NAMESPACE_URL, APIData.domainLink);
+    String udid=uuid.v4();
     print("=====> udid $udid");
     http.Response res = await http.post(Uri.parse(APIData.register),
         body: {"name": name, "email": email, "password": password,"udid": udid},
