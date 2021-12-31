@@ -1,17 +1,14 @@
 {
   "images" : [
     {
-      "filename" : "Simulator Screen Shot - iPhone 12 - 2021-12-14 at 18.33.17.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Simulator Screen Shot - iPhone 12 - 2021-12-14 at 18.33.17-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Simulator Screen Shot - iPhone 12 - 2021-12-14 at 18.33.17-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

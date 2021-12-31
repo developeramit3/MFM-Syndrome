@@ -14,7 +14,6 @@ void main() async {
   authToken = await storage.read(key: "token");
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'en', supportedLocales: ['en', 'ar', 'ur', 'hi']);
-
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
   OneSignal.shared.setAppId("3bf57f8e-4089-4542-a91c-aa4e6e000586");
