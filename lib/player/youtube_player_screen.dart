@@ -1,23 +1,44 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+// import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class YoutubePlayerScreen extends StatefulWidget {
-  YoutubePlayerScreen(this._controller);
-  final YoutubePlayerController _controller;
+  // YoutubePlayerScreen(this._controller);
+  // final YoutubePlayerController _controller;
 
   @override
   _YoutubePlayerScreenState createState() => _YoutubePlayerScreenState();
 }
 
-class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
+class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> with SingleTickerProviderStateMixin {
+  AnimationController _anicontroller;
+  Animation<Offset>_offsetAnimation;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _anicontroller = AnimationController(
+      duration: const Duration(seconds: 5),
+      vsync: this,
+    )..repeat(reverse: true);
+    _offsetAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(1.5, 0.0),
+    ).animate(CurvedAnimation(
+      parent: _anicontroller,
+      curve: Curves.linear,
+    ));
+
+  }
   @override
   Widget build(BuildContext context) {
-    const player = YoutubePlayerIFrame();
+    return Container();
+   /* const player = YoutubePlayerIFrame();
     return YoutubePlayerControllerProvider(
       controller: widget._controller,
       child: LayoutBuilder(
         builder: (context, constraints) {
+
           if (kIsWeb && constraints.maxWidth > 800) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,11 +57,47 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
         },
       ),
     );
+  */}
+  void _insertOverlay(BuildContext context) {
+    return Overlay.of(context).insert(
+      OverlayEntry(builder: (context) {
+        final size = MediaQuery.of(context).size;
+        return  Positioned(
+            width: size.width,
+            top: 200,
+            child: SlideTransition(
+              position:_offsetAnimation,
+              child: Container(
+                  child: Text('amit@gmail.com',
+                    style: TextStyle(
+                        color: Colors.black,
+                        backgroundColor: Colors.grey.shade200,
+                        fontSize: 10
+                    ),)
+              ),
+            ));
+        return Positioned(
+          width: 130,
+          height: 50,
+          top: 200,
+          left: size.width - 200,
+          child: Material(
+            color: Colors.transparent,
+            child: GestureDetector(
+                onTap: () => print('ON TAP OVERLAY!'),
+                child: Center (child: Container(
+                    decoration: BoxDecoration(color: Colors.redAccent),
+                    child: Text('BETA VERSION')
+                ),)
+            ),
+          ),
+        );
+      }),
+    );
   }
-
   @override
   void dispose() {
-    widget._controller.close();
+    // widget._controller.close();
     super.dispose();
   }
 }
@@ -67,7 +124,8 @@ class Controls extends StatelessWidget {
 class MetaDataSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return YoutubeValueBuilder(builder: (context, value) {
+    return Container();
+    /*return YoutubeValueBuilder(builder: (context, value) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -76,7 +134,7 @@ class MetaDataSection extends StatelessWidget {
         ],
       );
     });
-  }
+  */}
 }
 
 class _Text extends StatelessWidget {

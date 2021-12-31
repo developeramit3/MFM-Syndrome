@@ -34,9 +34,11 @@ Future<String> checkViolence() async {
   }
   if(Platform.isAndroid){
     isHotSpotEnabled= await  platform.invokeMethod('isHotspotOn');
-  }if(Platform.isAndroid){
+  }
+  if(Platform.isAndroid){
     isDevMode = await  platform.invokeMethod('isDevMode');
-  }if(Platform.isAndroid){
+  }
+  if(Platform.isAndroid){
     isUSBConnected = await  platform.invokeMethod('isUSBConnected');
   }
    if(isJailBroken){
@@ -70,6 +72,7 @@ Future<String> checkViolence() async {
   messagess.writeln(
   "* USB Connected, Disconnect USD for running safe & open app again.");
   }
+  // return "";
   return messagess.toString();
 }
 bool isShowingDialog=false;

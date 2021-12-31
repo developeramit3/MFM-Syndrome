@@ -1,16 +1,19 @@
 import 'dart:io';
 import 'package:eclass/utils/AppValidation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'common/global.dart';
 import 'my_app.dart';
-
+import 'dart:io' show Platform, exit;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await FlutterDownloader.initialize(
-  //     debug: true // optional: set false to disable printing logs to console
-  //     );
+  if(Platform.isAndroid) {
+    await FlutterDownloader.initialize(
+        debug: true // optional: set false to disable printing logs to console
+    );
+  }
   authToken = await storage.read(key: "token");
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'en', supportedLocales: ['en', 'ar', 'ur', 'hi']);

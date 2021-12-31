@@ -181,7 +181,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.pushNamed(context, "/instructorFaq");
             },
           ),
-          if (homeDataProvider.homeModel.settings.donationEnable == '1')
+          /*if (homeDataProvider.homeModel.settings.donationEnable == '1')
             ListTile(
               title: Text(
                 translate("Donate_"),
@@ -191,7 +191,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, "/donate");
               },
-            ),
+            ),*/
           logoutSection(Colors.red),
         ],
       ),
