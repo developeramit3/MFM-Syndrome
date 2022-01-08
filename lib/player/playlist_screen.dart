@@ -327,7 +327,8 @@ class _PlayListScreenState extends State<PlayListScreen>
           ),
         );
       }
-    } else {
+    }
+    else {
       downloadBtnTxt = '';
     }
 

@@ -9,11 +9,10 @@ import 'my_app.dart';
 import 'dart:io' show Platform, exit;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if(Platform.isAndroid) {
     await FlutterDownloader.initialize(
         debug: true // optional: set false to disable printing logs to console
     );
-  }
+
   authToken = await storage.read(key: "token");
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'en', supportedLocales: ['en', 'ar', 'ur', 'hi']);

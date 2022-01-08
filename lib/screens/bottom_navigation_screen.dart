@@ -5,6 +5,7 @@ import 'package:eclass/provider/recent_course_provider.dart';
 import 'package:eclass/provider/watchlist_provider.dart';
 import 'package:eclass/utils/AppValidation.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'cart_screen.dart';
 import 'courses_screen.dart';
@@ -96,6 +97,40 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     WidgetsFlutterBinding.ensureInitialized().addTimingsCallback((timings) {
      callbackDispatcher();
     });
+    final newVersion = NewVersion(
+      iOSId: 'tech.phoenixtechs.mfmsyndrome',
+      androidId: 'tech.phoenixtechs.mfmsyndrome',
+    );
+
+    // You can let the plugin handle fetching the status and showing a dialog,
+    // or you can fetch the status and display your own dialog, or no dialog.
+    const simpleBehavior = false;
+
+    if (simpleBehavior) {
+      basicStatusCheck(newVersion);
+    } else {
+      advancedStatusCheck(newVersion);
+    }
+  }
+  basicStatusCheck(NewVersion newVersion) {
+    newVersion.showAlertIfNecessary(context: context);
+  }
+
+  advancedStatusCheck(NewVersion newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      debugPrint(status.releaseNotes);
+      debugPrint(status.appStoreLink);
+      debugPrint(status.localVersion);
+      debugPrint(status.storeVersion);
+      debugPrint(status.canUpdate.toString());
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: 'New version available',
+        dialogText: 'Please updae app for best performance.',
+      );
+    }
   }
   showErrorDialog(BuildContext context,String message) {
     showDialog(

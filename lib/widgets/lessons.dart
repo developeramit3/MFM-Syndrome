@@ -472,6 +472,7 @@ class _LessonsState extends State<Lessons> {
     bool canView,
     bool isSectionViewed,
   ) {
+
     List<Widget> ret = [];
 
     // play video lessons
@@ -616,6 +617,13 @@ class _LessonsState extends State<Lessons> {
                       playAudio(
                           "${APIData.domainLink}files/audio/${lessons[idx].audio}");
                     } else {
+                      Fluttertoast.showToast(
+                          msg: "This video is paid!",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.CENTER,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
                       return;
                     }
                   },

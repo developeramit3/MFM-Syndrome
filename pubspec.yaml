@@ -80,6 +80,7 @@ dependencies:
   path_provider: ^2.0.1
   permission_handler: ^7.1.0
   audioplayers: ^0.19.1
+  new_version: ^0.2.3
 
     #  flutter_zoom_plugin:
     #    git:

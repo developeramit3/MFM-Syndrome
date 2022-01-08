@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import flutter_downloader
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
 var overlayController = UIViewController()
@@ -8,9 +9,12 @@ var overlayController = UIViewController()
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
-//       UIScreen.main.addObserver(self, forKeyPath: "captured", options: .new, context: nil)
-//      return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  
+      FlutterDownloaderPlugin.setPluginRegistrantCallback { FlutterPluginRegistry in
+          if (!FlutterPluginRegistry.hasPlugin("FlutterDownloaderPlugin")) {
+             FlutterDownloaderPlugin.register(with: FlutterPluginRegistry.registrar(forPlugin: "FlutterDownloaderPlugin")!)
+          }
+      }
+
 //Add observer to detect screen recording
 NotificationCenter.default.addObserver(self, selector: #selector(screenRecordingStatusChanged),
                                        name: UIScreen.capturedDidChangeNotification, object: nil)
@@ -26,7 +30,11 @@ self.displayOverlayControllerWith(message: "Screen recording is not allowed whil
 return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     
 }
-
+@objc func registerPlugins(registry: FlutterPluginRegistry) {
+       if (!registry.hasPlugin("FlutterDownloaderPlugin")) {
+          FlutterDownloaderPlugin.register(with: registry.registrar(forPlugin: "FlutterDownloaderPlugin")!)
+       }
+}
 override func applicationWillResignActive( _ application: UIApplication ) {
     self.window.isHidden = true;
     

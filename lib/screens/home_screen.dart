@@ -41,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _visible;
 
+
   Widget welcomeText(String name, String imageUrl, BuildContext context) {
     return _visible == true
         ? Padding(

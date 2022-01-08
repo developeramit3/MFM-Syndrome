@@ -72,7 +72,7 @@ Future<String> checkViolence() async {
   messagess.writeln(
   "* USB Connected, Disconnect USD for running safe & open app again.");
   }
-  // return "";
+  return "";
   return messagess.toString();
 }
 bool isShowingDialog=false;
